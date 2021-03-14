@@ -1,0 +1,13 @@
+name = "CVGSurfaceFile"
+uuid = "47b44e53-20b4-4063-98dc-20e0b386b99c"
+authors = ["powerzf <18883350900@163.com> and contributors"]
+version = "0.1.0"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[compat]
+julia = "1"
+
+[targets]
+test = ["Test"]
