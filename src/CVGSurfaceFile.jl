@@ -1,7 +1,6 @@
-module CVGSurfaceFile
+module 
 
     include("CVGStruct.jl")
-2+23
     export cvgseek, save_cvgfile
     export CVGSurface, Triangle, TrBoundry, Surface
     #将原始的.dat文件转化为自定义类型
