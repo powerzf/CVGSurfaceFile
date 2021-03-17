@@ -1,7 +1,7 @@
-module 
+module CVGSurfaceFile
 
     include("CVGStruct.jl")
-    export cvgseek, save_cvgfile
+    export cvgseek, save_cvgfile, cvgseek2
     export CVGSurface, Triangle, TrBoundry, Surface
     #将原始的.dat文件转化为自定义类型
     function cvgseek(file)
@@ -34,6 +34,40 @@ module
      
     end
     
+    function cvg_split(ios::IOStream)
+        split(readline(ios),' ')     
+    end
+
+
+    function cvgseek2(file)
+        filestream = open(file)
+    
+        fileline = readline(filestream)
+        
+        n_max_vertex, n_vertices, n_triangles = parse.(Int,split(fileline))
+    
+        triangles = Vector{Triangle}(undef,n_vertices)
+        trBoundry = Vector{TrBoundry}(undef,n_triangles)
+    
+        for i in 1:n_vertices
+            pos = position(filestream)
+            seek(filestream, pos)
+            string_triangleID, string_xyz... = cvg_split(filestream)
+            triangleID = parse(Int,string_triangleID)
+            x, y, z =  parse.(Float64,string_xyz)
+            triangles[i] = Triangle(triangleID, x, y, z)
+        end
+    
+        for i in 1:n_triangles
+            pos = position(filestream)
+            seek(filestream, pos)
+            triangleID1, triangleID2, triangleID3, boundryID = parse.(Int, cvg_split(filestream))
+            trBoundry[i]  = TrBoundry(triangleID1, triangleID2, triangleID3, boundryID)
+        end
+    
+        return Surface(n_max_vertex, n_vertices, n_triangles, triangles, trBoundry)
+     
+    end
     
     
     #给string函数添加方法
